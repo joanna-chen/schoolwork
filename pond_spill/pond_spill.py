@@ -49,14 +49,14 @@ def pond2(t):
     inflow1 = RATE_BETWEEN_POND*poll[t-1][0]
     outflow3 = RATE_BETWEEN_POND*poll[t-1][1]
     poll2 = poll[t-1][1] + inflow1 - outflow3
-    drawDots(canvas, t, minutes, poll1, pollMax, "green")
+    drawDots(canvas, t, minutes, poll2, pollMax, "green")
     return round(poll2, 4)
 
 def pond3(t):
     inflow2 = RATE_BETWEEN_POND*poll[t-1][1]
     outflow1 = RATE_BETWEEN_POND*poll[t-1][2]
     poll3 = poll[t-1][2] + inflow2 - outflow1
-    drawDots(canvas, t, minutes, poll1, pollMax, "blue")
+    drawDots(canvas, t, minutes, poll3, pollMax, "blue")
     return round(poll3, 4)
 
 if __name__ == "__main__":
