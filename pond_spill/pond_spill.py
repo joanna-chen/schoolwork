@@ -1,3 +1,11 @@
+##################################
+# Name: Shi Lin (Joanna) Chen    
+# This program computes the level of pollutant in three ponds based on the pollutant leak information.
+# The program asks for user input for the maximum amount of pollutant, the rate at which the pollutant leaks and 
+# how long the simulation should be run. The program then prints the level of pollutant in each pond 
+# at each hour and plots the graph of the pollutant amounts at each minute. 
+##################################
+
 # import modules 
 from plotpoints import createGrid
 from plotpoints import drawDots
