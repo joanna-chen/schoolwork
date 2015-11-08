@@ -21,8 +21,8 @@ for line in keywordsfile:
 	keywords[word] = number 
 # print(keywords)
 
-for line in tweetsfile: 
-	lst = line.split(' ', 6)
+for l in tweetsfile: 
+	lst = l.split(' ', 6)
 	lat = lst[0].lstrip('[')
 	lat = lst[0].rstrip(',') 
 	long = lst[1].rstrip(']')
