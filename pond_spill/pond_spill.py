@@ -31,11 +31,21 @@ win = GraphicsWindow(500, 500)
 canvas = win.canvas()
 
 def main():
-    createGrid(canvas, minutes, int(pollMax))
+    # accounts for the error that occurs when maximum pollutant is less than 20L
+    if pollMax < 20: 
+        createGrid(canvas, minutes, 100)
+    else:
+        createGrid(canvas, minutes, int(pollMax))
     
-    # calculate pollution levels of every minute
-    for i in range(1, minutes):
-        poll[i] = [pond1(i), pond2(i), pond3(i), pollutantLeak(i)]
+    # calculate pollution levels of every minute and graph pollutant amounts at every minute
+    if minutes < 1440:
+        for i in range(1, 1441):
+            poll[i] = [pond1(i), pond2(i), pond3(i), pollutantLeak(i)]
+        plotPoll(1440)
+    else:
+        for i in range(1, minutes+1):
+            poll[i] = [pond1(i), pond2(i), pond3(i), pollutantLeak(i)]
+        plotPoll(minutes)
         
     # print pollution levels for each hour
     for i in range(60, minutes, 60):
@@ -58,12 +68,18 @@ def pollutantLeak(t):
     else:
     	return 0
 
+# graph the pollutant amounts	
+def plotPoll(time):
+	for i in range(time+1): 
+	   drawDots(canvas, i, minutes, poll[i][0], pollMax, "red") 
+	   drawDots(canvas, i, minutes, poll[i][1], pollMax, "green")
+	   drawDots(canvas, i, minutes, poll[i][2], pollMax, "blue")
+
 # calculate pollutant level of Pond 1 and plot pollutant amount on graph
 def pond1(t):
     inflow3 = RATE_BETWEEN_POND*poll[t-1][2] 
     outflow2 = RATE_BETWEEN_POND*poll[t-1][0]
     poll1 = poll[t-1][0] + inflow3 - outflow2 + pollutantLeak(t) 
-    drawDots(canvas, t, minutes, poll1, pollMax, "red")
     return round(poll1, 5)
 
 # calculate pollutant level of Pond 2 and plot pollutant amount on graph
@@ -71,7 +87,6 @@ def pond2(t):
     inflow1 = RATE_BETWEEN_POND*poll[t-1][0]
     outflow3 = RATE_BETWEEN_POND*poll[t-1][1]
     poll2 = poll[t-1][1] + inflow1 - outflow3
-    drawDots(canvas, t, minutes, poll2, pollMax, "green")
     return round(poll2, 5)
 
 # calculate pollutant level of Pond 3 and plot pollutant amount on graph
@@ -79,7 +94,6 @@ def pond3(t):
     inflow2 = RATE_BETWEEN_POND*poll[t-1][1]
     outflow1 = RATE_BETWEEN_POND*poll[t-1][2]
     poll3 = poll[t-1][2] + inflow2 - outflow1
-    drawDots(canvas, t, minutes, poll3, pollMax, "blue")
     return round(poll3, 5)
 
 if __name__ == "__main__":
