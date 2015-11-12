@@ -1,3 +1,10 @@
+##################################
+# Name: Shi Lin (Joanna) Chen    
+# This program computes the happiness score of different regions of America. The program 
+# intakes a file of tweets and a file of keywords with their respective happiness scores.
+# It then computes the total number of tweets in each region and its happiness score.
+##################################
+
 import os.path
 
 # make sure the files exist

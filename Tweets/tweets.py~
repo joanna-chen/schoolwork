@@ -1,3 +1,10 @@
+##################################
+# Name: Shi Lin (Joanna) Chen    
+# This program computes the happiness score of different regions of America. The program 
+# intakes a file of tweets and a file of keywords with their respective happiness scores.
+# It then computes the total number of tweets in each region and the happiness score.
+##################################
+
 import os.path
 
 # make sure the files exist
@@ -47,13 +54,13 @@ for line in tweetsfile:
 		continue
 		
 	# determine what region the tweet is in
-	if long < -115.236428: 
+	if long <= -115.236428: 
 		region = 'pacific'
 		happiness['pacific'][3] += 1
-	elif long < -101.998892:
+	elif long <= -101.998892:
 		region = 'mountain'
 		happiness['mountain'][3] += 1
-	elif long < -87.518395:
+	elif long <= -87.518395:
 		region = 'central'
 		happiness['central'][3] += 1
 	else:
