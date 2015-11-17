@@ -59,7 +59,7 @@ for line in tweetsfile:
 	elif long <= -87.518395:
 		region = 'central'
 		happiness['central'][3] += 1
-	else:
+	elif long <= -67.444574:
 		region = 'eastern'
 		happiness['eastern'][3] += 1
 	

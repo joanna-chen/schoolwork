@@ -63,6 +63,7 @@ for line in tweetsfile:
 		region = 'eastern'
 		happiness['eastern'][3] += 1
 	
+	# remove parts of the line that are not the tweet or unnecessary punctuation
 	line = line.replace(', ', '', 4) 
 	line = line.replace('.', '', 2)
 	line = line.replace('.', ' ')
@@ -82,6 +83,7 @@ def happy_score():
 	for region in regionList:
 		total = 0
 		numKeywords = 0
+		
 		# calculate score
 		for i in happiness[region][0]:
 			# remove all unnecessary symbols
@@ -92,6 +94,7 @@ def happy_score():
 				total = total + keywords[word]
 				numKeywords += 1
 		happiness[region][1] = total
+		
 		if numKeywords != 0:
 			happiness[region][2] = total / numKeywords
 		else: 
@@ -103,11 +106,13 @@ def main():
 	
 	happy_score()
 	
+	# output of information
 	print('Eastern: \n num of tweets: ' +  str(happiness['eastern'][3]) + ' happiness score: ' + str(happiness['eastern'][2])) 
 	print('Central: \n num of tweets: ' +  str(happiness['central'][3]) + ' happiness score: ' + str(happiness['central'][2])) 
 	print('Mountain: \n num of tweets: ' +  str(happiness['mountain'][3]) + ' happiness score: ' + str(happiness['mountain'][2])) 
 	print('Pacific: \n num of tweets: ' +  str(happiness['pacific'][3]) + ' happiness score: ' + str(happiness['pacific'][2]))
 	
+	# draw the happy histogram
 	happy_histogram.drawSimpleHistogram(happiness['eastern'][2], happiness['central'][2], happiness['mountain'][2], happiness['pacific'][2])
 	
 main()
