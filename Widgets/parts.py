@@ -1,6 +1,9 @@
 '''
 Name: Shi Lin (Joanna) Chen    
-This program computes the
+This program computes whether there are sufficient parts in inventory to build given 
+widgets, by taking in information from two text files. If a widget can be built based on 
+the inventory, then the cost and the parts used for the widget. Otherwise, the user is 
+alerted that the widget cannot be built and told which parts are insufficient.
 '''
 
 class Parts():
@@ -52,110 +55,77 @@ class PartInventory():
 			
 	def removePart(self, part):
 		self.partsInventory.remove(part)
-		
-''' old code		
-def widgetCost(widget):
-	partsThere = True
-	while partsThere:
-		for part in widget:
-			if not part in inventory:
-				partsThere = False
-			# count how many parts
-				
-		
-def widgetInfo(widgetFile):
-	wFile = open(widgetFile, "r")
-	widget = []
-	for line in wFile: 
-		if line == '\n':
-			continue
-			widgetCost(widget) 
-			widget = {}
-		else:
-			widget.append(line)	
-'''			
-#
-'''
-wFile = open("widgets.txt", "r")
-buildable = True
-cost = 0
-missingParts = ''
-wFile.readline()
-for line in wFile: 
-	if line == '\n':
-		if buildable = True:
-			print('The widget can be built for $%f.2' % cost)
-		else: 
-			print('It cannot be built')
-			print('There is an insufficient supply of the following parts:' + missingParts[1:])
-		missingParts = ''
-		buildable = True
-		print()
-		wFile.readline()
-		continue
-		# check if there's enough w
-	else: 
-		thePart = line.split()
-		if thePart[0] in inventory.getInventory: 
-			cost = cost + thePart[0].getPrice() * thePart[1]
-			thePart[0].setQuantity(thePart[1])
-			if thePart[0].getQuantity() == 0:
-				inventory.removePart(thePart[0])
-		else: # no such part in inventory
-			buildable = False
-			missingParts = missingParts + ', ' + thePart[0]		
-'''
-#			
-	
+			
 def main():
+	wFile = open("widgets.txt", "r")
+
+	# add the parts to the inventory 
 	inventory = PartInventory()
 	inventory.addParts("parts.txt")
-	print(inventory.getInventory()) ###
 	
-	wFile = open("widgets.txt", "r")
+	# output starting inventory
+	print('Starting Inventory: ')
+	for part in inventory.getInventory():
+		print(part.getName() + ' | Quantity: ' + str(part.getQuantity()))
+	print()
+	
+	# declare and initialize variables 
 	buildable = True
 	cost = 0
 	missingParts = ''
 	widget = {}
+	
+	# output widget building information
 	print(wFile.readline())
-	for line in wFile: 
+	for line in wFile:
+		# for each widget 
 		if line == '\n':
 			if buildable == True:
 				print('The widget can be built for $%.2f' % (cost))
+				print('Parts Used:')
 				for part in inventory.getInventory():
 					if part.getName() in widget:
-						part.setQuantity(widget[part.getName()])
-						print(part.getQuantity())
+						print(part.getName() + ': ' + str(int(part.getQuantity()) - widget[part.getName()]))
+						part.setQuantity(widget[part.getName()]) # reduce quantity used
+						print(part.getQuantity()) ###
 						if part.getQuantity() == 0:
 							inventory.removePart(part)
 			else: 
 				print('It cannot be built')
 				print('There is an insufficient supply of the following parts:' + missingParts[1:])
+				
 			missingParts = ''
 			buildable = True
 			widget = {}
+			cost = 0
 			print()
 			print(wFile.readline())
 			continue
-			# check if there's enough w
+			
+			# iterate through all the parts required for a widget
 		else: 
 			thePart = line.split()
 			widget[thePart[0]] = int(thePart[1])
-			print(thePart)
+			print(thePart) ###
+			
 			found = False
+			
 			while found == False:
+				# check if the part required is in inventory
 				for part in inventory.getInventory():
-					print(part.getName(), part.getQuantity()) ### 
 					if thePart[0] == part.getName() and int(thePart[1]) <= part.getQuantity(): 
 						found = True
-						cost = cost + float(part.getPrice()) * float(thePart[1])
+						# compute cost
+						cost = cost + float(part.getPrice()) * int(thePart[1])
 						widget[thePart[0]] = part.getQuantity() - int(thePart[1]) 
 				if found == False:
 					buildable = False
 					missingParts = missingParts + ', ' + thePart[0]	
 					break
-				
-		# need to not subtract amount if not buildable
 					
+	# output ending inventory				
+	print('Ending Inventory: ')			
+	for part in inventory.getInventory():
+		print(part.getName() + ' | Quantity: ' + str(part.getQuantity()))
 				
 main()	
