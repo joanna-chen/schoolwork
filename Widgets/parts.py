@@ -87,7 +87,6 @@ def main():
 					if part.getName() in widget:
 						print(part.getName() + ': ' + str(int(part.getQuantity()) - widget[part.getName()]))
 						part.setQuantity(widget[part.getName()]) # reduce quantity used
-						print(part.getQuantity()) ###
 						if part.getQuantity() == 0:
 							inventory.removePart(part)
 			else: 
@@ -106,7 +105,6 @@ def main():
 		else: 
 			thePart = line.split()
 			widget[thePart[0]] = int(thePart[1])
-			print(thePart) ###
 			
 			found = False
 			
@@ -127,5 +125,7 @@ def main():
 	print('Ending Inventory: ')			
 	for part in inventory.getInventory():
 		print(part.getName() + ' | Quantity: ' + str(part.getQuantity()))
+		
+	wFile.close()
 				
 main()	
