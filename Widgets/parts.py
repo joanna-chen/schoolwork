@@ -41,7 +41,8 @@ class Parts():
 class PartInventory():
 	def __init__(self):
 		self.partsInventory = []
-		
+	
+	# mutator methods		
 	def addParts(self, fileName):
 		partNum = 0
 		file = open(fileName, "r")
@@ -50,11 +51,12 @@ class PartInventory():
 			partNum = Parts(l[0], l[1], l[2])
 			self.partsInventory.append(partNum)
 			
-	def getInventory(self):
-		return self.partsInventory
-			
 	def removePart(self, part):
 		self.partsInventory.remove(part)
+	
+	# getter method		
+	def getInventory(self):
+		return self.partsInventory
 			
 def main():
 	wFile = open("widgets.txt", "r")
@@ -92,7 +94,8 @@ def main():
 			else: 
 				print('It cannot be built')
 				print('There is an insufficient supply of the following parts:' + missingParts[1:])
-				
+			
+			# reset variable values	
 			missingParts = ''
 			buildable = True
 			widget = {}
