@@ -5,19 +5,25 @@
 # It then computes the total number of tweets in each region and its happiness score.
 ##########################################################################################
 
-import os.path
 import happy_histogram 
 
-# make sure the files exist
-kfile = input('What is the file with the keywords? ')
-if os.path.isfile(kfile):
-	keywordsfile = open(kfile, "r")
-	
-tfile = input('What is the file with the tweets? ')
-if os.path.isfile(tfile):
-	tweetsfile = open(tfile, "r")
+keywordsfile = None
+tweetsfile = None
 
-# {region: [tweets], total tweet scores, num of keywords, region score, num of tweets}
+# make sure the files exist
+while keywordsfile == None:
+	try:
+		keywordsfile = open(input('What is the file with the keywords? '), "r")
+	except IOError as err:
+		print(err)
+		
+while tweetsfile == None:
+	try:
+		tweetsfile = open(input('What is the file with the tweets? '), "r")
+	except IOError as err:
+		print(err)
+
+# {region: [tweets], num of valid tweets, num of keywords, region score, num of tweets}
 happiness = {'eastern': [[], 0, 0, 0], 'central': [[], 0, 0, 0], 'mountain': [[], 0, 0, 0], 'pacific': [[], 0, 0, 0]}
 regionList = ['eastern', 'central', 'mountain', 'pacific']
 
@@ -59,7 +65,7 @@ for line in tweetsfile:
 	elif long <= -87.518395:
 		region = 'central'
 		happiness['central'][3] += 1
-	else:
+	elif long <= -67.444574:
 		region = 'eastern'
 		happiness['eastern'][3] += 1
 	
@@ -69,11 +75,9 @@ for line in tweetsfile:
 	line = line.replace('.', ' ')
 	line = line.replace(', ', ' ')
 	lst = line.split()
-	lst = lst[1:]
+	lst = lst[4:]
 	
-	for tweetWord in lst:
-		# add tweet in the correct region
-		happiness[region][0].append(tweetWord)
+	happiness[region][0].append(lst)
 	
 # search for the keywords
 # score = total of the keywords' happiness value / number of keywords found
@@ -82,35 +86,43 @@ for line in tweetsfile:
 def happy_score():
 	for region in regionList:
 		total = 0
-		numKeywords = 0
+		numTweets = 0
 		
 		# calculate score
 		for i in happiness[region][0]:
-			# remove all unnecessary symbols
-			word = i.strip('/^"`&*\'•“”()-+=0123456789»%$:\!.?#,;')
-			word = word.lower()
+			tweetScore = 0
+			numKeywords = 0
+			for tweetWord in i: 
+				# remove all unnecessary symbols
+				word = tweetWord.strip('/^"`&@_*\'•“”~[]<>()-+=0123456789»%$:\!.?#,;')
+				word = word.lower()
 			
-			if word in keywords: 
-				total = total + keywords[word]
-				numKeywords += 1
-		happiness[region][1] = total
+				if word in keywords: 
+					tweetScore = tweetScore + keywords[word]
+					numKeywords += 1
+			
+			if	numKeywords != 0:
+				total += tweetScore	/ numKeywords
+				numTweets += 1
+			else: 
+				total += 0
+					
+		happiness[region][1] = numTweets
 		
-		if numKeywords != 0:
-			happiness[region][2] = total / numKeywords
-		else: 
+		if numTweets != 0:
+			happiness[region][2] = total / numTweets
+		else:
 			happiness[region][2] = 0
-
+	
 def main(): 
 	keywordsfile.close()
 	tweetsfile.close()
 	
 	happy_score()
 	
-	# output of information
-	print('Eastern: \n num of tweets: ' +  str(happiness['eastern'][3]) + ' happiness score: ' + str(happiness['eastern'][2])) 
-	print('Central: \n num of tweets: ' +  str(happiness['central'][3]) + ' happiness score: ' + str(happiness['central'][2])) 
-	print('Mountain: \n num of tweets: ' +  str(happiness['mountain'][3]) + ' happiness score: ' + str(happiness['mountain'][2])) 
-	print('Pacific: \n num of tweets: ' +  str(happiness['pacific'][3]) + ' happiness score: ' + str(happiness['pacific'][2]))
+	for region in regionList:
+		print(region + ': \n num of tweets: ' +  str(happiness[region][3]) + ' num of valid tweets: ' + str(happiness[region][1]) + ' happiness score: ' + str(happiness[region][2])) 
+		print()
 	
 	# draw the happy histogram
 	happy_histogram.drawSimpleHistogram(happiness['eastern'][2], happiness['central'][2], happiness['mountain'][2], happiness['pacific'][2])
