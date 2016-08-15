@@ -1,12 +1,12 @@
 ##################################
-# Name: Shi Lin (Joanna) Chen    
+# Name: Shi Lin (Joanna) Chen
 # This program computes the level of pollutant in three ponds based on the pollutant leak information.
-# The program asks for user input for the maximum amount of pollutant, the rate at which the pollutant leaks and 
-# how long the simulation should be run. The program then prints the level of pollutant in each pond 
-# at each hour and plots the graph of the pollutant amounts at each minute. 
+# The program asks for user input for the maximum amount of pollutant, the rate at which the pollutant leaks and
+# how long the simulation should be run. The program then prints the level of pollutant in each pond
+# at each hour and plots the graph of the pollutant amounts at each minute.
 ##################################
 
-# import modules 
+# import modules
 from plotpoints import createGrid
 from plotpoints import drawDots
 from graphics import GraphicsWindow
@@ -23,7 +23,7 @@ poll3 = 0
 pollLeak = 0
 poll = {0: [0, 0, 0, 0]}
 
-# constant values 
+# constant values
 RATE_BETWEEN_POND = 0.005
 
 # create the graphics window and get the canvas
@@ -32,11 +32,11 @@ canvas = win.canvas()
 
 def main():
     # accounts for the error that occurs when maximum pollutant is less than 20L
-    if pollMax < 20: 
+    if pollMax < 20:
         createGrid(canvas, minutes, 100)
     else:
         createGrid(canvas, minutes, int(pollMax))
-    
+
     # calculate pollution levels of every minute and graph pollutant amounts at every minute
     if minutes < 1440:
         for i in range(1, 1441):
@@ -46,7 +46,7 @@ def main():
         for i in range(1, minutes+1):
             poll[i] = [pond1(i), pond2(i), pond3(i), pollutantLeak(i)]
         plotPoll(minutes)
-        
+
     # print pollution levels for each hour
     for i in range(60, minutes, 60):
         if i < minutes:
@@ -54,13 +54,13 @@ def main():
         else:
             print('Minutes [FINAL]: ', i)
         print('Pond 1: ', poll[i][0], ' Pond 2: ', poll[i][1], ' Pond 3: ', poll[i][2])
-     
-    # print pollution level for after 1440 minutes    
+
+    # print pollution level for after 1440 minutes
     if minutes <= 1440:
         print('Minutes: 1440')
         print('Pond 1: ', pond1(1440), ' Pond 2: ', pond2(1440), ' Pond 3: ', pond3(1440))
-        
-# calculate the amount of pollutant flowing into the ponds        
+
+# calculate the amount of pollutant flowing into the ponds
 def pollutantLeak(t):
     pollLeak = t * pollRate
     if pollLeak <= pollMax:
@@ -68,18 +68,18 @@ def pollutantLeak(t):
     else:
     	return 0
 
-# graph the pollutant amounts	
+# graph the pollutant amounts
 def plotPoll(time):
-	for i in range(time+1): 
-	   drawDots(canvas, i, minutes, poll[i][0], pollMax, "red") 
+	for i in range(time+1):
+	   drawDots(canvas, i, minutes, poll[i][0], pollMax, "red")
 	   drawDots(canvas, i, minutes, poll[i][1], pollMax, "green")
 	   drawDots(canvas, i, minutes, poll[i][2], pollMax, "blue")
 
 # calculate pollutant level of Pond 1 and plot pollutant amount on graph
 def pond1(t):
-    inflow3 = RATE_BETWEEN_POND*poll[t-1][2] 
+    inflow3 = RATE_BETWEEN_POND*poll[t-1][2]
     outflow2 = RATE_BETWEEN_POND*poll[t-1][0]
-    poll1 = poll[t-1][0] + inflow3 - outflow2 + pollutantLeak(t) 
+    poll1 = poll[t-1][0] + inflow3 - outflow2 + pollutantLeak(t)
     return round(poll1, 5)
 
 # calculate pollutant level of Pond 2 and plot pollutant amount on graph
@@ -98,7 +98,3 @@ def pond3(t):
 
 if __name__ == "__main__":
     main()
-
-
-
-

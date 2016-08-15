@@ -1,5 +1,5 @@
 ##################################
-# Name: Shi Lin (Joanna) Chen    
+# Name: Shi Lin (Joanna) Chen
 # This program computes the rental cost of a car based on the classification code.
 # The program asks for user input for the user's name, classification code, the number of days the car is rented for,
 # the starting odometer reading and the ending odometer reading. The program then computes the total rental cost.
@@ -36,7 +36,7 @@ def showSummary():
 
 # calculation for budget classification code
 if classCode == 'B' or classCode == 'b':
-	base = 40 
+	base = 40
 	bill = base * daysRented + kilometersDriven * CHARGE_RATE
 
 # calculation for daily classification code
@@ -68,7 +68,7 @@ elif classCode == 'W' or classCode == 'w':
 	else:
 		base += 100
 		bill = base * weeksRented + CHARGE_RATE * (kilometersDrivenWeekly - 1500) * weeksRented
-	
+
 else:
     # error message in the case that the user enters an invalid classification code
 	print('Error: Invalid classification code.')
@@ -77,5 +77,3 @@ else:
 if error == False:
     # show the car rental information (including the bill amount)
 	showSummary()
-
-
